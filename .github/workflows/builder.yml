@@ -17,8 +17,29 @@ jobs:
 
       - name: Execute build
         run: |
-          #cd image-builder
           ./RootStock-NG.sh -c machinekit-debian-stretch
-          IMG_DIR=`ls -d deploy/debian*`
+          IMG_DIR=`ls -d deploy/debian*/`
           cd ${IMG_DIR}
           sudo ./setup_sdcard.sh --img-4gb bone-example --dtb beaglebone --distro-bootloader --enable-cape-universal --enable-uboot
+          echo "::set-output name=image::${IMG_DIR}/bone-example-4gb.img"
+
+      - name: Create release
+        uses: actions/create-release@v1
+        id: create_release
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          draft: false
+          prerelease: false
+          release_name: "Debian Machinekit 5.9.1-bone-rt-r12"
+          tag_name: ${{ github.ref }}
+
+      - name: Upload artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ steps.version.outputs.image }}
+          asset_name: "debian-machinekit-5.9.1-bone-rt-r12.img"
+          asset_content_type: application/octet‑stream
