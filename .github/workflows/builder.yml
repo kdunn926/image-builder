@@ -19,6 +19,7 @@ jobs:
         run: sudo apt-get install -y dosfstools git kpartx wget parted
 
       - name: Execute build
+        id: build
         run: |
           ./RootStock-NG.sh -c machinekit-debian-stretch
           IMG_DIR=`ls -d deploy/debian*/`
@@ -28,7 +29,7 @@ jobs:
 
       - name: Create release
         uses: actions/create-release@v1
-        id: create_release
+        id: release
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
@@ -42,7 +43,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ steps.version.outputs.image }}
+          upload_url: ${{ steps.release.outputs.upload_url }}
+          asset_path: ${{ steps.build.outputs.image }}
           asset_name: "debian-machinekit-5.9.1-bone-rt-r12.img"
           asset_content_type: application/octet‑stream
