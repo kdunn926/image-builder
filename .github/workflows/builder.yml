@@ -15,6 +15,9 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v2
 
+      - name: Install dependencies
+        run: sudo apt-get install -y dosfstools git kpartx wget parted
+
       - name: Execute build
         run: |
           ./RootStock-NG.sh -c machinekit-debian-stretch
