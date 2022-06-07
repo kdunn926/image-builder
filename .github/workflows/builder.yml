@@ -35,7 +35,7 @@ jobs:
           draft: false
           prerelease: false
           release_name: "Debian Machinekit 5.9.1-bone-rt-r12"
-          tag_name: ${{ github.ref }}
+          tag_name: deb-mk-5.9.1-bone-rt-r12
 
       - name: Upload artifact
         uses: actions/upload-release-asset@v1
