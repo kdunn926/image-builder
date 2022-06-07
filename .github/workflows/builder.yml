@@ -27,8 +27,8 @@ jobs:
           sudo ./setup_sdcard.sh --img-4gb bone-example --dtb beaglebone --distro-bootloader --enable-cape-universal --enable-uboot
           echo "::set-output name=image::${IMG_DIR}/bone-example-4gb.img"
 
-      - name: Create release
-        uses: actions/create-release@v1
+      - name: Create release and upload image
+        uses: softprops/action-gh-release@v1
         id: release
         env:
           GITHUB_TOKEN: ${{ github.token }}
@@ -37,13 +37,6 @@ jobs:
           prerelease: false
           release_name: "Debian Machinekit 5.9.1-bone-rt-r12"
           tag_name: deb-mk-5.9.1-bone-rt-r12
-
-      - name: Upload artifact
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          upload_url: ${{ steps.release.outputs.upload_url }}
-          asset_path: ${{ steps.build.outputs.image }}
-          asset_name: "debian-machinekit-5.9.1-bone-rt-r12.img"
-          asset_content_type: application/octet‑stream
+          files: ${{ steps.build.outputs.image }}
+          #asset_name: "debian-machinekit-5.9.1-bone-rt-r12.img"
+          #asset_content_type: application/octet‑stream
