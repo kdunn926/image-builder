@@ -17,7 +17,7 @@ jobs:
 
       - name: Execute build
         run: |
-          cd image-builder
+          #cd image-builder
           ./RootStock-NG.sh -c machinekit-debian-stretch
           IMG_DIR=`ls -d deploy/debian*`
           cd ${IMG_DIR}
